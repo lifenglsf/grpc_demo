@@ -2,14 +2,15 @@ package main
 
 import (
 	"context"
-	"github.com/lifenglsf/grpc_demo/helloworld/helloworld"
-	"google.golang.org/grpc"
 	"log"
 	"net"
+	"time"
+
+	"github.com/lifenglsf/grpc_demo/helloworld/helloworld"
+	"google.golang.org/grpc"
 )
 
 type server struct {
-	helloworld.UnimplementedGreeterServer
 }
 
 func (s server) SayHello(ctx context.Context, request *helloworld.HelloRequest) (*helloworld.HelloReply, error) {
@@ -23,8 +24,10 @@ func main() {
 		log.Fatalf("failed to listen on 9999:%v", err)
 	}
 	gs := grpc.NewServer()
-	helloworld.RegisterGreeterServer(gs, &server{})
+	s := helloworld.NewGreeterService(&server{})
+	helloworld.RegisterGreeterService(gs, s)
 	if err := gs.Serve(lis); err != nil {
 		log.Fatalf("failed to server:%v", err)
 	}
+	time.Now().Format(time.ANSIC)
 }

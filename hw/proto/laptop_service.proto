@@ -1,0 +1,9 @@
+syntax = "proto3";
+package hw;
+option go_package = "./pb";
+import "laptop_message.proto";
+message CreateLaptopRequest { Laptop laptop = 1; }
+message CreatelaptopResponse { string id = 1; }
+service LaptopService {
+  rpc createLaptop(CreateLaptopRequest) returns (CreatelaptopResponse) {};
+}
